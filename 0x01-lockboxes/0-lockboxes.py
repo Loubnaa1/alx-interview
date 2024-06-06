@@ -13,6 +13,6 @@ def canUnlockAll(boxes):
                 opened = True
                 break
             j += 1
-        if not :
+        if not opened:
             return False
     return True
