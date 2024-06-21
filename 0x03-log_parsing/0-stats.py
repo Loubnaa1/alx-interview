@@ -54,3 +54,4 @@ if __name__ == "__main__":
         print("Error occurred:", error)
     finally:
         display_metrics()
+
