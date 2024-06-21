@@ -1,13 +1,13 @@
 #!/usr/bin/python3
-"""log entries from stdin and calculate relevant metrics"""
+"""script that reads stdin line by line and computes metrics """
 import sys
 import re
 
 if __name__ == "__main__":
-    log_entry_counter = 0
-    cumulative_file_size = 0
-    status_code_counts = {}
-    log_entry_pattern = (
+    count = 0
+    total_file_size = 0
+    dict_status = {}
+    pattern = (
         r'^(\d{1,3}\.){3}\d{1,3}'
         r' - '
         r'\[\d{4}-\d{2}-\d{2}'
@@ -17,40 +17,37 @@ if __name__ == "__main__":
         r' \d+$'
     )
 
-    def display_metrics():
-        """file sizes and status code frequency"""
-        print('File size: {}'.format(cumulative_file_size))
-        for code, count in sorted(status_code_counts.items()):
-            print('{}: {}'.format(code, count))
+    def print_stats():
+        print('File size: {}'.format(total_file_size))
+        for key, value in sorted(dict_status.items()):
+            print('{}: {}'.format(key, value))
 
     try:
-        while True:
-            log_entry = sys.stdin.readline()
-            if not log_entry:
-                break
+        for line in sys.stdin:
+            if re.match(pattern, line):
+                count += 1
+                match_file_size = re.search(r'\d+$', line)
+                match_status = re.search(r'(\d+)\s+\d+$', line)
 
-            if re.match(log_entry_pattern, log_entry):
-                log_entry_counter += 1
-                file_size_match = re.search(r'\d+$', log_entry)
-                status_code_match = re.search(r'(\d+)\s+\d+$', log_entry)
+                if match_file_size:
+                    file_size = match_file_size.group()
+                    total_file_size += int(file_size)
 
-                if file_size_match:
-                    file_size = file_size_match.group()
-                    cumulative_file_size += int(file_size)
+                if match_status:
 
-                if status_code_match:
-                    status_code = status_code_match.group(1)
-                    if status_code in status_code_counts:
-                        status_code_counts[status_code] += 1
+                    status = match_status.group(1)
+
+                    if status in dict_status:
+                        dict_status[status] += 1
                     else:
-                        status_code_counts[status_code] = 1
+                        dict_status[status] = 1
 
-                if log_entry_counter % 10 == 0:
-                    display_metrics()
+                if count % 10 == 0:
+                    print_stats()
             else:
                 continue
 
-    except Exception as error:
-        print("Error occurred:", error)
+    except Exception:
+        pass
     finally:
-        display_metrics()
+        print_stats()
