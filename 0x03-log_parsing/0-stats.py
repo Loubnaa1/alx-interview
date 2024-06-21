@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-process server log entries from stdin and calculate relevant metrics
-"""
+"""log entries from stdin and calculate relevant metrics"""
 import sys
 import re
 
