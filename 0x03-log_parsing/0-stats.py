@@ -18,7 +18,7 @@ if __name__ == "__main__":
     )
 
     def display_metrics():
-        """Displays the accumulated file sizes and status code frequency"""
+        """file sizes and status code frequency"""
         print('File size: {}'.format(cumulative_file_size))
         for code, count in sorted(status_code_counts.items()):
             print('{}: {}'.format(code, count))
