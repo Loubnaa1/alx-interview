@@ -24,3 +24,4 @@ def island_perimeter(grid):
                     flag += 1
 
     return flag
+
