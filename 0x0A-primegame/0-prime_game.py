@@ -1,15 +1,12 @@
 #!/usr/bin/python3
-""" Prime Game
-"""
+''' prime game '''
 
 
 def isWinner(x, nums):
     if x < 1 or not nums:
         return None
 
-    maria = 0
-    ben = 0
-
+    maria, ben = 0, 0
     for n in nums:
         numbers = list(range(1, n + 1))
         current_player = "Maria"
@@ -25,27 +22,11 @@ def isWinner(x, nums):
 
             if is_prime:
                 primes_found.append(i)
-                new_numbers = []
-                for num in numbers:
-                    if num == 1 or num % i != 0:
-                        new_numbers.append(num)
-                numbers = new_numbers
-
-                if current_player == "Maria":
-                    current_player = "Ben"
-                else:
-                    current_player = "Maria"
-
+                numbers = [num for num in numbers if num == 1 or num % i != 0]
+                current_player = "Ben" if current_player == "Maria" else "Maria"
             i += 1
 
-        if current_player == "Ben":
-            maria += 1
-        else:
-            ben += 1
+        maria += current_player == "Ben"
+        ben += current_player == "Maria"
 
-    if maria > ben:
-        return "Maria"
-    elif ben > maria:
-        return "Ben"
-    else:
-        return None
+    return "Maria" if maria > ben else "Ben" if ben > maria else None
